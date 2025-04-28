@@ -1,0 +1,7 @@
+numpy
+pandas
+pywin32
+nltk
+scikit-learn
+requests
+tabulate 

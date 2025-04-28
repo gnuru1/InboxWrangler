@@ -1,0 +1,30 @@
+{
+  "sender_weight": 0.45,
+  "topic_weight": 0.20,
+  "temporal_weight": 0.20,
+  "message_state_weight": 0.1,
+  "recipient_weight": 0.05,
+  
+  "use_llm_for_content": false,
+  "enhanced_fallback": true,
+  "nlp_extract_topics_count": 5,
+  "nlp_detect_action_items": true,
+  "nlp_use_keyword_boost": true,
+  
+  "high_priority_threshold": 0.8,
+  "medium_priority_threshold": 0.5,
+  
+  "unread_penalty": 0.2,
+  "read_kept_bonus": 0.3,
+  "ignore_penalty": 0.15,
+  "flagged_bonus": 0.2,
+  "due_today_bonus": 0.3,
+  "due_soon_bonus": 0.2,
+  "high_importance_bonus": 0.25,
+  "off_hours_bonus": 0.1,
+  
+  "to_me_bonus": 0.15,
+  "direct_to_me_bonus": 0.15,
+  "many_recipients_penalty": 0.15,
+  "cc_me_penalty": 0.1
+} 

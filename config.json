@@ -1,0 +1,60 @@
+{
+    "sender_weight": 0.35,
+    "topic_weight": 0.25,
+    "temporal_weight": 0.15,
+    "message_state_weight": 0.15,
+    "recipient_weight": 0.1,
+    "high_priority_threshold": 0.8,
+    "medium_priority_threshold": 0.5,
+    "reply_pattern_score_factor": 1.0,
+    "initiation_score_factor": 0.6,
+    "read_kept_score_factor": 0.4,
+    "min_emails_for_pattern": 1,
+    "reply_time_weight": 0.4,
+    "reply_rate_weight": 0.4,
+    "reply_length_weight": 0.2,
+    "max_analysis_emails": 5000,
+    "days_for_temporal_analysis": 90,
+    
+    "use_llm_for_content": false,
+    "use_llm_fallback": true,
+    "llm_cache_dir": "./llm_cache",
+    "llm_required": false,
+    "enhanced_fallback": true,
+    
+    "nlp_extract_topics_count": 5,
+    "nlp_detect_action_items": true,
+    "nlp_use_keyword_boost": true,
+    
+    "unread_penalty": 0.15,
+    "read_kept_bonus": 0.3,
+    "ignore_penalty": 0.35,
+    "flagged_bonus": 0.15,
+    "due_today_bonus": 0.25,
+    "due_soon_bonus": 0.15,
+    "high_importance_bonus": 0.2,
+    "off_hours_bonus": 0.05,
+    
+    "to_me_bonus": 0.15,
+    "direct_to_me_bonus": 0.1,
+    "many_recipients_penalty": 0.1,
+    "cc_me_penalty": 0.05,
+    
+    "llm_config": {
+        "api_type": "local",
+        "api_endpoint": "http://localhost:1234/v1/chat/completions",
+        "model": "local-model",
+        "max_tokens": 1500,
+        "temperature": 0.1,
+        "use_cache": true,
+        "timeout": 120,
+        
+        "use_copilot_proxy": false,
+        "copilot_proxy": {
+            "work_dir": "./copilot_work",
+            "cache_dir": "./copilot_cache",
+            "wait_time": 15,
+            "use_cache": true
+        }
+    }
+} 
