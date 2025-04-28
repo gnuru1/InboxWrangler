@@ -1,6 +1,6 @@
 # Hybrid LLM-Enhanced Email Organizer
 
-*Note - LLM integration has had zero testing.  All testing thus far using NLTK methods.
+*Note - LLM integration has had zero testing.  All testing thus far using NLTK methods.  This README was LLM generated and may not be accurate!
 
 A sophisticated email management solution that leverages both traditional machine learning and optional LLM capabilities to intelligently organize Microsoft Outlook inboxes based on your unique behavior patterns.
 
