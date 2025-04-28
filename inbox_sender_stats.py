@@ -17,6 +17,7 @@ import pywintypes
 from pathlib import Path
 from collections import Counter, defaultdict
 import re
+import pandas as pd
 
 try:
     from thefuzz import fuzz
@@ -54,6 +55,8 @@ def parse_args():
                         help="Number of top senders to display in the report (default: 20).")
     parser.add_argument("--fuzzy-threshold", type=int, default=85,
                         help="Similarity threshold (0-100) for grouping subjects (default: 85).")
+    parser.add_argument("--output", type=str, default=None,
+                        help="Optional path to save the report data as a CSV file.")
     parser.add_argument("--data-dir", type=str, default="./email_data",
                         help="Directory containing analysis data (needed for contact map) (default: ./email_data).")
     parser.add_argument("--config", type=str, default="./config.json",
@@ -303,6 +306,23 @@ def main():
         
     if not report_data:
          print("No sender data collected.")
+
+    # --- Save to CSV if output path provided --- 
+    if args.output:
+        output_path = Path(args.output)
+        try:
+            # Ensure the output directory exists
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            # Create DataFrame and save
+            df = pd.DataFrame(report_data)
+            df.to_csv(output_path, index=False)
+            logger.info(f"Report data saved to {output_path}")
+            print(f"\nReport data also saved to: {output_path}")
+        except Exception as e:
+            logger.error(f"Failed to save report CSV to {output_path}: {e}")
+            print(f"\nError: Failed to save report CSV to {output_path}: {e}", file=sys.stderr)
+            # Optionally, return an error code if saving fails?
+            # return 1 
 
     return 0
 

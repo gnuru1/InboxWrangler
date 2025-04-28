@@ -6,4 +6,5 @@ scikit-learn
 requests
 tabulate
 thefuzz
-python-Levenshtein 
+python-Levenshtein
+streamlit 
