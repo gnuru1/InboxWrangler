@@ -1,6 +1,6 @@
 # Hybrid LLM-Enhanced Email Organizer
 
-*Note - LLM integration has had zero testing.  All testing thus far using NLTK methods.  This README was LLM generated and may not be accurate!
+*Note - LLM integration has had zero testing.  All testing thus far using NLTK methods.
 
 A sophisticated email management solution that leverages both traditional machine learning and optional LLM capabilities to intelligently organize Microsoft Outlook inboxes based on your unique behavior patterns.
 
@@ -170,6 +170,38 @@ python main.py recommend --limit 10 --threshold 0.5
 -   `--threshold <float>`: (Optional) Minimum score required for recommendation (default: 0.5).
 -   `--config <path>`, `--data-dir <path>`, `--debug`: (Optional) Global options.
 
+### 6. Inspect Email Scores (Debugging/Tuning)
+
+Analyze the detailed score calculation for the most recent emails in your Inbox to understand how components and weights contribute to the final score. Useful for tuning `config.json`.
+
+```bash
+python inspect_email_score.py --limit 5
+```
+
+-   `inspect_email_score.py`: The script to run.
+-   `--limit <number>`: **Required.** Number of recent emails to inspect.
+-   `--config <path>`, `--data-dir <path>`, `--debug`: (Optional) Global options.
+
+This script prints a detailed breakdown for each email, including:
+    -   Subject, Sender, Received Time
+    -   Final Calculated Score
+    -   Table showing each scoring component (Sender, Topic, Temporal, Message State, Recipient), its raw score, the weight applied from `config.json`, and its contribution to the final score.
+
+### 7. Analyze Inbox Sender Statistics (Cleanup Aid)
+
+Get a quick overview of sender statistics in your current Inbox, focusing on volume, read/unread percentage, and subject line similarity (using fuzzy matching) to identify potential bulk cleanup targets.
+
+```bash
+python inbox_sender_stats.py --limit 1000 --top-senders 20 --fuzzy-threshold 85
+```
+
+-   `inbox_sender_stats.py`: The script to run.
+-   `--limit <number>`: **Required.** Number of recent emails to analyze.
+-   `--top-senders <number>`: (Optional) Number of top senders (by volume) to display (default: 20).
+-   `--fuzzy-threshold <0-100>`: (Optional) Similarity threshold for grouping subjects (default: 85). Lower values group more aggressively.
+-   `--config <path>`, `--data-dir <path>`, `--debug`: (Optional) Global options.
+
+This script outputs a table showing the top senders, their total email count (within the limit), their unread percentage, and the percentage of their emails that fall into the largest "fuzzy subject" cluster.
 
 ## Configuration (`config.json`)
 

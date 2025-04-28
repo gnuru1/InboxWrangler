@@ -22,7 +22,7 @@ from config import load_config
 from outlook_utils import connect_to_outlook, get_default_folder, olFolderInbox, olFolderSentMail
 from analyzer import EmailAnalyzer
 from llm_service import create_llm_service
-from organizer import get_recommendations_report
+from organizer import get_recommendations_report, organize_inbox
 
 logger = logging.getLogger(__name__)
 

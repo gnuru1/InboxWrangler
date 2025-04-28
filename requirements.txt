@@ -4,4 +4,6 @@ pywin32
 nltk
 scikit-learn
 requests
-tabulate 
+tabulate
+thefuzz
+python-Levenshtein 
