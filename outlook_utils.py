@@ -11,6 +11,9 @@ olFolderInbox = 6
 olFolderSentMail = 5
 olFolderArchive = 23
 
+# Rule constants
+olRuleReceive = 0
+
 def connect_to_outlook():
     """
     Establish connection to Outlook application and return namespace.
@@ -262,4 +265,76 @@ def create_task_from_email(email_item, reminder_days=None):
         return False
     except Exception as e:
         logger.error(f"Error creating task from email: {e}", exc_info=True)
+        return False
+
+def create_sender_rule(namespace, rules, sender_identifier, action_type, target_folder_path=None, rule_name="AutoRule"):
+    """
+    Creates an Outlook rule object in memory based on sender and action type.
+
+    Args:
+        namespace: Outlook MAPI namespace object.
+        rules: The Rules collection object (from namespace.DefaultStore.GetRules()).
+        sender_identifier (str): The sender's email address or display name.
+        action_type (str): The action ("Move to Folder", "Delete Permanently", "Mark as Read").
+        target_folder_path (str, optional): The path for the move destination. Required if action_type is "Move to Folder".
+        rule_name (str, optional): The name for the new rule.
+
+    Returns:
+        bool: True if the rule object was successfully configured in memory, False otherwise.
+              Note: This does NOT save the rule to Outlook yet.
+    """
+    try:
+        logger.info(f"Creating rule object '{rule_name}' for sender '{sender_identifier}' with action '{action_type}'")
+        rule = rules.Create(rule_name, olRuleReceive)
+
+        # --- Set Condition: Sender Address --- 
+        # The SenderAddress condition can often match display names, but email is more robust.
+        rule.Conditions.SenderAddress.Enabled = True
+        # Outlook expects a list/tuple of addresses even for one
+        rule.Conditions.SenderAddress.Addresses = [sender_identifier]
+
+        # --- Set Action --- 
+        if action_type == "Move to Folder":
+            if not target_folder_path:
+                logger.error("Target folder path is required for 'Move to Folder' action.")
+                return False
+            # Find the target folder
+            target_folder = get_folder_by_path(namespace, target_folder_path)
+            if not target_folder:
+                 # Try creating it relative to Inbox if simple name?
+                 # For now, let's require it exists or provide full path
+                 logger.error(f"Target folder '{target_folder_path}' not found. Rule action cannot be set.")
+                 # Optionally try creating the folder here? get_or_create_folder?
+                 # Need to decide base parent folder if relative path is given.
+                 return False
+                
+            rule.Actions.MoveToFolder.Enabled = True
+            rule.Actions.MoveToFolder.Folder = target_folder
+            logger.debug(f"Set rule action to move to: {target_folder.FolderPath}")
+           
+        elif action_type == "Delete Permanently":
+            rule.Actions.DeletePermanently.Enabled = True
+            logger.debug("Set rule action to delete permanently.")
+           
+        elif action_type == "Mark as Read":
+            rule.Actions.MarkAsRead.Enabled = True
+            logger.debug("Set rule action to mark as read.")
+           
+        else:
+            logger.error(f"Unsupported action type: {action_type}")
+            return False
+           
+        # --- Final Rule Settings --- 
+        rule.Enabled = True
+        # We do NOT save here. Saving happens once after all rules are created.
+        logger.info(f"Rule object '{rule_name}' configured successfully in memory.")
+        return True # Indicate success in configuring the rule object
+
+    except pywintypes.com_error as ce:
+        logger.error(f"COM Error creating rule '{rule_name}': {ce}")
+        # Check if rule already exists? Name collision?
+        # For now, just log and return False
+        return False
+    except Exception as e:
+        logger.error(f"Unexpected error creating rule '{rule_name}': {e}", exc_info=True)
         return False 
