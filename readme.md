@@ -203,6 +203,23 @@ python inbox_sender_stats.py --limit 1000 --top-senders 20 --fuzzy-threshold 85
 
 This script outputs a table showing the top senders, their total email count (within the limit), their unread percentage, and the percentage of their emails that fall into the largest "fuzzy subject" cluster.
 
+### 8. Generate Standalone HTML Sender Report (Quick Overview)
+
+Generate a quick HTML report of sender statistics directly from your Inbox *without* relying on prior analysis data or contact normalization. Useful for a fast overview based on raw sender information.
+
+```bash
+python html_sender_report.py --limit 1000 --output sender_report.html --top-senders 20 --fuzzy-threshold 85
+```
+
+-   `html_sender_report.py`: The standalone script to run.
+-   `--limit <number>`: **Required.** Number of recent emails to analyze.
+-   `--output <filename.html>`: **Required.** Path to save the generated HTML report.
+-   `--top-senders <number>`: (Optional) Number of top senders (by volume) to display (default: 20).
+-   `--fuzzy-threshold <0-100>`: (Optional) Similarity threshold for grouping subjects (default: 85).
+-   `--debug`: (Optional) Enable detailed debug logging.
+
+**Note:** This script uses the *raw* sender names/emails from Outlook and does *not* perform contact normalization like the main `analyze` command or the `inbox_sender_stats.py` script. The output is an HTML file.
+
 ## Configuration (`config.json`)
 
 Customize the system's behavior by editing `config.json`. If the file doesn't exist, the defaults will be used. Here's an example reflecting many available options (based on the provided `config.json`):
