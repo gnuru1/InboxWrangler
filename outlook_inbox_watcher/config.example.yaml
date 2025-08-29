@@ -1,0 +1,70 @@
+# Rename to config.yaml and adjust to your environment.
+
+database_path: "outlook_watcher.db"
+
+response_sla_minutes: 60  # default 1 hour
+check_interval_seconds: 30  # how often to check timers
+
+# Run-time behavior
+notify:
+  enabled: true
+  to:
+    - "team-managers@company.com"
+  cc: []
+  subject_template: "[SLA Breach] {team_name} unanswered in '{subject}'"
+  body_template: |
+    Team,
+    
+    A callout to {team_name} in conversation:
+      Subject: {subject}
+      From: {from_name} <{from_email}>
+      Received: {received_time}
+      SLA Due: {due_at}
+      Conversation ID: {conversation_id}
+    
+    No team response was recorded within {sla_minutes} minutes.
+    
+    Last message preview:
+    ---
+    {body_preview}
+    ---
+    
+    Please review and respond or triage as needed.
+
+outlook:
+  profile: null  # null = default profile
+  # Optional: if you need to target a non-default mailbox/store, set the display name
+  store_display_name: null  # e.g., "Team Shared Mailbox"
+  inbox_folder: "Inbox"
+  sent_folder: "Sent Items"
+  ignore_category: "OutlookWatcher"  # any item with this category is ignored
+
+targets:
+  # Any match in To/CC makes the thread eligible.
+  distribution_lists:
+    - "team@company.com"   # SMTP address (preferred)
+    - "Team DL"            # or the DL display name, as seen in Outlook
+  member_addresses:
+    - "alice@company.com"
+    - "bob@company.com"
+    - "carol@company.com"
+
+team:
+  name: "Example Support Team"
+  mention_aliases:
+    - "@support"
+    - "support team"
+    - "support"
+  members:
+    - name: "Alice Smith"
+      emails: ["alice@company.com"]
+      aliases: ["alice", "@alice", "Alice S."]
+    - name: "Bob Jones"
+      emails: ["bob@company.com"]
+      aliases: ["bob", "@bob"]
+    - name: "Carol Hart"
+      emails: ["carol@company.com"]
+      aliases: ["carol", "@carol"]
+
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
